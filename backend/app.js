@@ -77,12 +77,6 @@ app.use('/api/ventas', ventasRoutes);
 //Soporte rutas
 app.use('/api/soporte', soporteRoutes);
 
-
-
-
-
-
-
 // Levantar el servidor
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);

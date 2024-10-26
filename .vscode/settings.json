@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/1f1f2f71-3fd9-4dd4-8ad5-1f4f69c9a921/resourceGroups/PLross/providers/Microsoft.Web/sites/lross-frontedn",
+    "appService.deploySubpath": "."
+}

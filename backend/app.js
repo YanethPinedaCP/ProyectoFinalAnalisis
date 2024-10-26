@@ -1,67 +1,89 @@
-// app.js o tu archivo principal
 const express = require('express');
 const cors = require('cors');
 const productoRoutes = require('./routes/productoRoutes');
-const carritoRoutes = require('../backend/routes/carritoRoutes');
 const session = require('express-session');
 const usuarioRoutes = require('./routes/usuarioRoutes');
-
+const categoriaRoutes = require('./routes/CategoriaRoutes');
+const imagenesRoutes = require('./routes/imageRoutes');
+const carritoRoutes = require('./routes/carritoRoutes'); // Aseguramos que las rutas del carrito están correctas
+const catalogoRoutes = require('./routes/catalogoRoutes'); // Aseguramos que las rutas del carrito están correctas
+const resumenRoutes = require('./routes/resumenRoutes'); // Aseguramos que las rutas del carrito están correctas
+const usuariosRoutes = require('./routes/usuariosRoutes'); // Aseguramos que las rutas del carrito están correctas
+const adminRoutes = require('./routes/adminRoutes'); // Aseguramos que las rutas del carrito están correctas
+const inventarioRoutes = require('./routes/inventarioRoutes');
+const ventasRoutes = require('./routes/ventasRoutes');
+const soporteRoutes = require('./routes/soporteRoutes');
 
 require('dotenv').config();
 
 const port = 5000;
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-app.use(session({
-  secret: 'mi_secreto_super_seguro', // Cambia esto por algo más seguro
-  resave: false,  // No reescribas la sesión si no se ha modificado
-  saveUninitialized: false,  // No guardes sesiones vacías
-  cookie: { secure: false }  // Cambia a true si usas HTTPS
+app.use(cors({
+  origin: 'http://localhost:3000'
 }));
 
+// Middleware
+app.use(cors());
+app.use(express.json()); // Middleware para manejar cuerpos JSON
 
-// Ruta para ver si la API va corriendo
+// Configuración de sesiones
+app.use(session({
+  secret: 'mi_secreto_super_seguro', // Asegúrate de cambiar esto por algo más seguro
+  resave: false,  // No reescribir la sesión si no se ha modificado
+  saveUninitialized: false,  // No guardar sesiones vacías
+  cookie: { secure: false }  // Cambia a true si usas HTTPS en producción
+}));
+
+// Ruta para verificar que la API está corriendo
 app.get('/', (req, res) => {
     res.send('Bienvenidos a LRoss API');
 });
 
-// Rutas API productos
+// Rutas de productos
 app.use('/api', productoRoutes);
 
-// Rutas API para carrito
-app.use('/carrito', carritoRoutes);
+// Rutas para gestionar el carrito de compras
+app.use('/api/carrito', carritoRoutes); // Usa las rutas de carrito definidas en carritoRoutes.js
 
+// Rutas de usuarios
 app.use('/api/usuarios', usuarioRoutes);
 
-// Ruta para agregar un producto al carrito
-app.post('/carrito/agregarcarro', (req, res) => {
-  const producto = req.body;
-  // Verificar si el producto ya existe en el carrito
-  const index = req.session.carrito.findIndex(item => item.id_producto === producto.id_producto);
-  
-  if (index !== -1) {
-      // Si ya existe, aumentar la cantidad
-      req.session.carrito[index].cantidad += 1;
-  } else {
-      // Si no existe, agregarlo
-      producto.cantidad = 1; // Inicializar cantidad
-      req.session.carrito.push(producto);
-  }
+// Rutas de categorías
+app.use('/api', categoriaRoutes);
 
-  res.json({ message: 'Producto agregado al carrito', carrito: req.session.carrito });
-});
+// Rutas para imágenes
+app.use('/upload', imagenesRoutes);
 
-// Ruta para mostrar el carrito
-app.get('/carrito/mostrarcarro', (req, res) => {
-  res.json({ carrito: req.session.carrito });
-});
+//Ruta generos
+app.use('/api', catalogoRoutes);
+
+//Resumen Ruta
+app.use('/api', resumenRoutes);
+
+//Usauaurio rutas
+app.use('/api/usr', usuariosRoutes);
+
+//Usuarios administradores
+
+app.use('/api/admins', adminRoutes);
+
+//Inventario gestion rutas
+app.use('/api/inventario', inventarioRoutes);
+
+//Vnetas
+app.use('/api/ventas', ventasRoutes);
+
+//Soporte rutas
+app.use('/api/soporte', soporteRoutes);
 
 
-// Levanta el servidor
+
+
+
+
+
+// Levantar el servidor
 app.listen(port, () => {
-    console.log(`El servidor está corriendo en http://localhost:${port}`);
+    console.log(`Servidor corriendo en http://localhost:${port}`);
 });

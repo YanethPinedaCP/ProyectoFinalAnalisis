@@ -1,15 +1,25 @@
+// routes/carritoRoutes.js
 const express = require('express');
+const { getCarrito, agregarCarrito, agregarProductosDeLocalStorage, finalizarCompra, eliminarProductoDelCarrito, aumentarCantidad, getResumenCompra, disminuirCantidad } = require('../controllers/carritoController'); // Importar el controlador
+
 const router = express.Router();
-const carritoController = require('../controllers/carritoController'); // Asegúrate de que esta ruta sea correcta
 
-// Verificar que el controlador está definido
-console.log(carritoController); // Esto debería imprimir el objeto con los métodos
+// Ruta para obtener el carrito de un usuario por su ID
+router.get('/:id_usuario', getCarrito);
 
-
-router.use(carritoController.initCarrito);
 // Ruta para agregar un producto al carrito
-router.post('/agregarcarro', carritoController.agregarAlCarrito);
+router.post('/agregar', agregarCarrito);
 
-// Ruta para mostrar el carrito
-router.get('/mostrarcarro', carritoController.mostrarCarrito);
+router.post('/agregarDeLocalStorage', agregarProductosDeLocalStorage);  // Nueva ruta
+
+router.get('/resumen/:id_usuario', getResumenCompra);  // Nueva ruta
+
+// Ruta para aumentar cantidad
+router.put('/aumentar', aumentarCantidad);
+
+// Ruta para disminuir cantidad
+router.put('/disminuir', disminuirCantidad);
+
+router.delete('/eliminar/', eliminarProductoDelCarrito);
+
 module.exports = router;
